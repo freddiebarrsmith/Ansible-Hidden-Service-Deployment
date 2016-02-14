@@ -6,6 +6,7 @@
     action: apt pkg=apache2 state=latest
   - name: add new sources
     lineinfile:  dest=/etc/apt/sources.list line="deb http://deb.torproject.org/torproject.org trusty main"
+  - name: add new sources2
     lineinfile:  dest=/etc/apt/sources.list line="deb-src http://deb.torproject.org/torproject.org trusty main"    
   - name: add keys
     command: gpg --keyserver keys.gnupg.net --recv 886DDD89
