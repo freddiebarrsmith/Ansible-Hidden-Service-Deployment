@@ -10,6 +10,7 @@
     lineinfile:  dest=/etc/apt/sources.list line="deb-src http://deb.torproject.org/torproject.org trusty main"    
   - name: add keys
     command: gpg --keyserver keys.gnupg.net --recv 886DDD89
+  - name: add keys
     command: gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add - 
   - name: update
     action:  apt update_cache=yes
