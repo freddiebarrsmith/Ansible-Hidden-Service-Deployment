@@ -1,24 +1,22 @@
 - name: a play that runs entirely on the ansible host
   hosts: 127.0.0.1
   connection: local
+  become: yes
   tasks:
   - name: install apache
-    action: apt pkg=apache2 state=latest
+    apt: name=apache2 state=latest update_cache=yes
   - name: add new sources
-    lineinfile:  dest=/etc/apt/sources.list line="deb http://deb.torproject.org/torproject.org trusty main"
+    apt_repository: repo='deb http://deb.torproject.org/torproject.org trusty main' state=present
   - name: add new sources2
-    lineinfile:  dest=/etc/apt/sources.list line="deb-src http://deb.torproject.org/torproject.org trusty main"    
+    apt_repository: repo='deb-src http://deb.torproject.org/torproject.org trusty main' state=present
   - name: add keys
-    command: gpg --keyserver keys.gnupg.net --recv 886DDD89
-    command: gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add - 
-  - name: update
-    action:  apt update_cache=yes
+    apt_key: keyserver=keys.gnupg.net id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
   - name: install tor
-    command: apt-get -y --force-yes install tor deb.torproject.org-keyring
+    apt: name=tor force=yes
   - name: remove apparmor protection
-    lineinfile: dest=/etc/apparmor.d/local/system_tor line="/home/tordir/* rwmk,"   
+    lineinfile: dest=/etc/apparmor.d/local/system_tor line="/home/tordir/* rwmk,"
   - name: restart apparmor
-    command: sudo service apparmor restart
+    service: name=apparmor state=restarted
   - name: Creates directory
     file: path=/home/tordir state=directory owner=debian-tor mode=0700 recurse=yes
   - name: configuration options
@@ -26,6 +24,6 @@
   - name: config options
     lineinfile: dest=/etc/tor/torrc line="HiddenServicePort 80 127.0.0.1:80"
   - name: tor restart
-    command: service tor restart
+    service: name=tor state=restarted
   - name: print out tor hostname
     action: command cat /home/tordir/hostname
