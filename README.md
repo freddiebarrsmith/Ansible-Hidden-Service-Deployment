@@ -10,7 +10,7 @@ apt-get -y install git
 
 git clone https://github.com/freddiebarrsmith/Ansible-Hidden-Service-Deployment.git
 
-ansible-playbook darkweb.yml
+ansible-playbook Ansible-Hidden-Service-Deployment/darkweb.yml
 
 
 cat /home/tordir/hostname 
