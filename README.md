@@ -2,6 +2,7 @@ Setup Instructions
 ===================================
 apt-get update
 
+/etc/ansible/hosts >> localhost ansible_connection=local
 
 apt-get install ansible
 
