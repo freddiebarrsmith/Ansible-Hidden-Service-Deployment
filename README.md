@@ -1,5 +1,7 @@
 Setup Instructions
 ===================================
+apt-get update
+
 apt-get install ansible
 
 apt-get install git
