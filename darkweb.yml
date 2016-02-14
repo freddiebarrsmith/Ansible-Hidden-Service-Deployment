@@ -2,7 +2,7 @@
   hosts: 127.0.0.1
   connection: local
   tasks:
-  - name: install git
+  - name: install apache
     action: apt pkg=apache2 state=latest
   - name: add new sources
     lineinfile:  dest=/etc/apt/sources.list line="deb http://deb.torproject.org/torproject.org trusty main"
