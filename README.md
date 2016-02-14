@@ -2,9 +2,11 @@ Setup Instructions
 ===================================
 apt-get update
 
-echo "localhost ansible_connection=local" >> /etc/ansible/hosts 
 
 apt-get -y install ansible
+
+echo "localhost ansible_connection=local" >> /etc/ansible/hosts 
+
 
 apt-get -y install git
 
