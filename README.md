@@ -1,4 +1,4 @@
-How to install tor hidden service:
+Setup Instructions
 ===================================
 apt-get install ansible
 
