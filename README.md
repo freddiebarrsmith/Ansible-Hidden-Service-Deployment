@@ -13,6 +13,6 @@ git clone https://github.com/freddiebarrsmith/Ansible-Hidden-Service-Deployment.
 ansible-playbook darkweb.yml
 
 
+cat /home/tordir/hostname 
 
-
-
+this last command is to get the name of your new .onion site!
