@@ -2,12 +2,26 @@
   hosts: 127.0.0.1
   connection: local
   tasks:
-  - name: install apache
-    action: apt pkg=apache2 state=latest
+  - name: create new user
+    action: adduser debian-tor
+  - name: install nginx
+    action: apt pkg=nginx state=latest
+  - name: Remove lines with unwanted occurrences of listen
+    lineinfile: dest=/etc/nginx/sites-enabled/default
+              regexp="^listen"
+              state=absent 
+  - name: nginx configuration options
+    lineinfile: dest=/etc/nginx/sites-enabled/default 
+                line="listen 127.0.0.1:8080;" 
+                insertafter="^server {"
+  - name: nginx restart
+    command: service nginx restart
   - name: add new sources
-    lineinfile:  dest=/etc/apt/sources.list line="deb http://deb.torproject.org/torproject.org trusty main"
+    lineinfile:  dest=/etc/apt/sources.list 
+                line="deb http://deb.torproject.org/torproject.org trusty main"
   - name: add new sources2
-    lineinfile:  dest=/etc/apt/sources.list line="deb-src http://deb.torproject.org/torproject.org trusty main"    
+    lineinfile:  dest=/etc/apt/sources.list 
+                line="deb-src http://deb.torproject.org/torproject.org trusty main"    
   - name: add keys
     command: gpg --keyserver keys.gnupg.net --recv 886DDD89
   - name: add keys
@@ -17,16 +31,29 @@
   - name: install tor
     command: apt-get -y --force-yes install tor deb.torproject.org-keyring
   - name: remove apparmor protection
-    lineinfile: dest=/etc/apparmor.d/local/system_tor line="/home/tordir/* rwmk,"   
+    lineinfile: dest=/etc/apparmor.d/local/system_tor 
+                line="/home/debian-tor/tor/* rwmk,"   
   - name: restart apparmor
     command: sudo service apparmor restart
-  - name: Creates directory
-    file: path=/home/tordir state=directory owner=debian-tor mode=0700 recurse=yes
+  - name: Creates Tor directory
+    file: path=/home/debian-tor/tor 
+                state=directory 
+                owner=debian-tor 
+                mode=0700 
+                recurse=yes
+  - name: Creates WebServer directory
+    file: path=/home/debian-tor/tor/web 
+                state=directory owner=debian-tor 
+                mode=0700 
+                recurse=yes
   - name: configuration options
-    lineinfile: dest=/etc/tor/torrc line="HiddenServiceDir /home/tordir/"
+    lineinfile: dest=/etc/tor/torrc 
+                line="HiddenServiceDir /home/debian-tor/tor/"
   - name: config options
-    lineinfile: dest=/etc/tor/torrc line="HiddenServicePort 80 127.0.0.1:80"
+    lineinfile: dest=/etc/tor/torrc 
+                line="HiddenServicePort 80 127.0.0.1:8080"
   - name: tor restart
     command: service tor restart
+  - pause: minutes=1
   - name: print out tor hostname
     action: command cat /home/tordir/hostname
