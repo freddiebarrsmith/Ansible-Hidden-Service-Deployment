@@ -12,6 +12,6 @@ cat /home/tordir/hostname
 The last command is to get the name of your new .onion site!
 
 # Stuff I'm Working On
-
+(lets be honest i will never implement these things)
 * Bash Deployment
 * OS Hardening
